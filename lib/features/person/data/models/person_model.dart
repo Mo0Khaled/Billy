@@ -1,7 +1,7 @@
 import 'package:billy/features/person/domain/entities/person_entity.dart';
 
 class PersonModel extends PersonEntity {
-  const PersonModel({required int id, required String name, String? phone})
+  const PersonModel({required int? id, required String name, String? phone})
       : super(id: id, name: name, phone: phone);
 
   factory PersonModel.fromJson(Map<String, dynamic> json) => PersonModel(

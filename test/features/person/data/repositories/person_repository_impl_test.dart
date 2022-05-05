@@ -1,6 +1,7 @@
 import 'package:billy/core/exceptions/exceptions.dart';
 import 'package:billy/core/exceptions/failure.dart';
 import 'package:billy/features/person/data/data_sources/person_locale_data_source.dart';
+import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/data/repositories/person_repository_impl.dart';
 import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:dartz/dartz.dart';
@@ -20,7 +21,7 @@ void main() {
     );
   });
 
-  const tPerson = PersonEntity(id: 1, name: 'name');
+  const tPerson = PersonModel(id: 1, name: 'name');
   group('create person', () {
     test('should return a void when the person is created successfully',
         () async {
