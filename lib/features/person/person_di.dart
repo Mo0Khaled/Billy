@@ -14,7 +14,7 @@ Future<void> personDi() async {
   // Register services here
   sl.registerFactory(
     () => PersonCubit(
-      cratePersonUseCase: sl(),
+      createPersonUseCase: sl(),
     ),
   );
   //use cases
