@@ -11,5 +11,5 @@ abstract class PersonRepository {
 
   Future<Either<Failure, PersonEntity>> updatePerson(PersonEntity person);
 
-  Future<Future<Either<Failure, void>>> deletePerson(String id);
+  Future<Either<Failure, void>> deletePerson(String id);
 }
