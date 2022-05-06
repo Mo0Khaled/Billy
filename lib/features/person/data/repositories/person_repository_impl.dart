@@ -22,9 +22,13 @@ class PersonRepositoryImpl implements PersonRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deletePerson(String id) {
-    // TODO: implement deletePerson
-    throw UnimplementedError();
+  Future<Either<Failure, List<PersonModel>>> getPersons() async {
+    try {
+      final personsList = await localeDataSource.getPersons();
+      return Right(personsList);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
   }
 
   @override
@@ -34,14 +38,14 @@ class PersonRepositoryImpl implements PersonRepository {
   }
 
   @override
-  Future<Either<Failure, List<PersonModel>>> getPersons() {
-    // TODO: implement getPersons
+  Future<Either<Failure, PersonModel>> updatePerson(PersonEntity person) {
+    // TODO: implement updatePerson
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, PersonModel>> updatePerson(PersonEntity person) {
-    // TODO: implement updatePerson
+  Future<Either<Failure, void>> deletePerson(String id) {
+    // TODO: implement deletePerson
     throw UnimplementedError();
   }
 }

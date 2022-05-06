@@ -11,7 +11,8 @@ class PersonModel extends PersonEntity {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+    // todo add uuid
+        'id': id ?? 1,
         'name': name,
         'phone': phone,
       };

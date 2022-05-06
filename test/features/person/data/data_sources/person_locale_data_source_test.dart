@@ -21,9 +21,10 @@ void main() {
 
     personLocaleDataSource = PersonLocaleDataSourceImpl(hiveBox: personBox);
   });
+  const tPerson = PersonModel(id: null, name: 'name');
+  final tPersonsList = [tPerson.toJson(),tPerson.toJson(),tPerson.toJson()];
 
   group("store created person", () {
-    const tPerson = PersonModel(id: null, name: 'name');
     final tPersonMap = tPerson.toJson();
     test('should store/cache the person object in the person box', () async {
       // arrange
@@ -31,7 +32,18 @@ void main() {
       // act
       await personLocaleDataSource.createPerson(tPerson);
       // assert
-      verify(() => personBox.add( tPersonMap)).called(1);
+      verify(() => personBox.add(tPersonMap)).called(1);
+    });
+  });
+
+  group("get persons", () {
+    test('should store/cache the person object in the person box', () async {
+      // arrange
+      when(() => personBox.values).thenReturn(tPersonsList);
+      // act
+      await personLocaleDataSource.getPersons();
+      // assert
+      verify(() => personBox.values).called(1);
     });
   });
 }

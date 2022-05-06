@@ -13,8 +13,6 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   Future<void> createPerson(PersonModel person) async {
     final personMap = person.toJson();
     await hiveBox.add(personMap);
-
-    // await hiveBox.put(LocaleDbKeys.personsKey, personMap);
   }
 
   @override
@@ -24,19 +22,20 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   }
 
   @override
-  Future<PersonEntity> getPerson(String id) {
+  Future<PersonModel> getPerson(String id) {
     // TODO: implement getPerson
     throw UnimplementedError();
   }
 
   @override
-  Future<List<PersonEntity>> getPersons() {
-    // TODO: implement getPersons
-    throw UnimplementedError();
+  Future<List<PersonModel>> getPersons() async {
+    return hiveBox.values
+        .map((person) => PersonModel.fromJson(person as Map<String, dynamic>))
+        .toList();
   }
 
   @override
-  Future<PersonEntity> updatePerson(PersonModel person) {
+  Future<PersonModel> updatePerson(PersonModel person) {
     // TODO: implement updatePerson
     throw UnimplementedError();
   }

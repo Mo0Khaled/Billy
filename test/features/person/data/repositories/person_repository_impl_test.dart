@@ -22,6 +22,7 @@ void main() {
   });
 
   const tPerson = PersonModel(id: 1, name: 'name');
+  const tPersonsList = [tPerson, tPerson, tPerson];
   group('create person', () {
     test('should return a void when the person is created successfully',
         () async {
@@ -45,6 +46,32 @@ void main() {
 
       // assert
       verify(() => mockPersonLocalDataSource.createPerson(tPerson)).called(1);
+      expect(result, equals(Left(CacheFailure())));
+    });
+  });
+
+  group("get persons", () {
+    test('should return a list of persons when there is one on the db',
+        () async {
+      // arrange
+      when(() => mockPersonLocalDataSource.getPersons())
+          .thenAnswer((_) async => tPersonsList);
+      // act
+      final result = await repository.getPersons();
+      // assert
+      verify(() => mockPersonLocalDataSource.getPersons()).called(1);
+      expect(result, equals(const Right(tPersonsList)));
+    });
+
+    test('should throws a cache failure if there is no person on the db',
+        () async {
+      // arrange
+      when(() => mockPersonLocalDataSource.getPersons())
+          .thenThrow(CacheException());
+      // act
+      final result = await repository.getPersons();
+      // assert
+      verify(() => mockPersonLocalDataSource.getPersons()).called(1);
       expect(result, equals(Left(CacheFailure())));
     });
   });

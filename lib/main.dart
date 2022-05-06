@@ -6,9 +6,10 @@ import 'package:path_provider/path_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupLocator();
   final getAppDir = await getApplicationSupportDirectory();
   await Hive.initFlutter(getAppDir.path);
+  await setupLocator();
+
   runApp(const Billy());
 }
 
@@ -20,7 +21,7 @@ class Billy extends StatelessWidget {
     return MaterialApp(
       title: 'Billy',
       theme: AppTheme.lightTheme,
-      // home:
+      // home: ,
     );
   }
 }
