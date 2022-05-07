@@ -1,5 +1,6 @@
 import 'package:billy/core/usecases/use_case.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
+import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:billy/features/person/domain/use_cases/create_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_persons_use_case.dart';
 import 'package:bloc/bloc.dart';
@@ -14,6 +15,8 @@ class PersonCubit extends Cubit<PersonState> {
   PersonCubit(
       {required this.createPersonUseCase, required this.getPersonsUseCase})
       : super(PersonInitial());
+
+  List<PersonEntity> persons = [];
 
   Future<void> createPerson({required PersonModel personModel}) async {
     emit(PersonLoading());
@@ -33,12 +36,11 @@ class PersonCubit extends Cubit<PersonState> {
     emit(PersonLoading());
     final failureOrData = await getPersonsUseCase(NoParams());
     failureOrData.fold(
-      (failure) => emit(
-        PersonFailure(),
-      ),
-      (data) => emit(
-        PersonGetSuccessfully(),
-      ),
-    );
+        (failure) => emit(
+              PersonFailure(),
+            ), (data) {
+      persons = data;
+      emit(PersonGetSuccessfully(personList: persons));
+    });
   }
 }

@@ -15,8 +15,12 @@ class PersonLoading extends PersonState {
 }
 
 class PersonGetSuccessfully extends PersonState {
+  final List<PersonEntity> personList;
+
+  const PersonGetSuccessfully({required this.personList});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [personList];
 }
 
 class PersonAddedSuccessfully extends PersonState {

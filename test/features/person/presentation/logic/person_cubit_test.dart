@@ -76,7 +76,7 @@ void main() {
       // assert later
       final expectedStates = [
         PersonLoading(),
-        PersonGetSuccessfully(),
+        const PersonGetSuccessfully(personList: tPersonsList),
       ];
       expectLater(personCubit.stream, emitsInOrder(expectedStates));
       // act

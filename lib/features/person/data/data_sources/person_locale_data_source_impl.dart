@@ -30,7 +30,7 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   @override
   Future<List<PersonModel>> getPersons() async {
     return hiveBox.values
-        .map((person) => PersonModel.fromJson(person as Map<String, dynamic>))
+        .map((person) => PersonModel.fromJson(person as Map<dynamic, dynamic>))
         .toList();
   }
 
