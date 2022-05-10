@@ -16,7 +16,7 @@ void main() {
   });
 
   const tPerson =  PersonModel(
-    id: 1,
+    id: '1',
     name: 'name',
     phone: 'phone',
   );

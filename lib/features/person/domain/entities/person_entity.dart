@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class PersonEntity extends Equatable {
-  final int? id;
+  final String? id;
   final String name;
   final String? phone;
 

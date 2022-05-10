@@ -5,6 +5,7 @@ import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:uuid/uuid.dart';
 
 class MockHive extends Mock implements HiveInterface {}
 
@@ -21,11 +22,13 @@ void main() {
 
     personLocaleDataSource = PersonLocaleDataSourceImpl(hiveBox: personBox);
   });
-  const tPerson = PersonModel(id: null, name: 'name');
-  final tPersonsList = [tPerson.toJson(),tPerson.toJson(),tPerson.toJson()];
+  final id = const Uuid().v1();
+
+  final tPerson = PersonModel(id: id, name: 'name',phone: 'phone');
+  final tPersonsList = [tPerson.toJson(id: id),tPerson.toJson(id: id),tPerson.toJson(id: id)];
 
   group("store created person", () {
-    final tPersonMap = tPerson.toJson();
+    final tPersonMap = tPerson.toJson(id: id);
     test('should store/cache the person object in the person box', () async {
       // arrange
       when(() => personBox.add(tPersonMap)).thenAnswer((_) async => 0);

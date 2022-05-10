@@ -21,7 +21,7 @@ void main() {
     );
   });
 
-  const tPerson = PersonModel(id: 1, name: 'name');
+  const tPerson = PersonModel(id: '1', name: 'name');
   const tPersonsList = [tPerson, tPerson, tPerson];
   group('create person', () {
     test('should return a void when the person is created successfully',

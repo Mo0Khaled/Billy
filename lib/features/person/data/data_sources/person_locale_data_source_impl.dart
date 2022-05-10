@@ -3,6 +3,7 @@ import 'package:billy/features/person/data/data_sources/person_locale_data_sourc
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   final Box hiveBox;
@@ -11,7 +12,7 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
 
   @override
   Future<void> createPerson(PersonModel person) async {
-    final personMap = person.toJson();
+    final personMap = person.toJson(id: person.id!);
     await hiveBox.add(personMap);
   }
 

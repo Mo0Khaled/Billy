@@ -26,7 +26,7 @@ void main() {
   });
 
   group('createPerson', () {
-    const tPerson = PersonModel(id: 1, name: 'name');
+    const tPerson = PersonModel(id: '1', name: 'name');
     test(
         'should emit [PersonLoading,PersonAddedSuccessfully] when the person is created successfully',
         () async {
@@ -65,7 +65,7 @@ void main() {
   });
 
   group('getPerson', () {
-    const tPerson = PersonModel(id: 1, name: 'name');
+    const tPerson = PersonModel(id: '1', name: 'name');
     const tPersonsList = [tPerson, tPerson, tPerson];
     test(
         'should emit [PersonLoading,PersonGetSuccessfully] when the persons gotten successfully',

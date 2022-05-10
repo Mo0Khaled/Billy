@@ -15,7 +15,7 @@ void main() {
     mockPersonRepository = MockPersonRepository();
     useCase = GetPersonsUseCase(repository: mockPersonRepository);
   });
-  const tPerson = PersonModel(id: 1, name: 'name');
+  const tPerson = PersonModel(id: '1', name: 'name');
   const tPersonsList = [tPerson, tPerson, tPerson];
   test("should return a list of persons ", () async {
     // arrange
