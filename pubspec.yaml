@@ -22,7 +22,7 @@ dependencies:
     # Local storage
   hive: ^2.1.0
   hive_flutter: ^1.1.0
-  path_provider: ^2.0.9
+  path_provider: ^2.0.10
   # Unique identifier
   uuid: ^3.0.6
 dev_dependencies:

@@ -10,14 +10,17 @@ import 'package:uuid/uuid.dart';
 class MockHive extends Mock implements HiveInterface {}
 
 class MockHiveBox extends Mock implements Box {}
+class MockIterable extends Mock implements Iterable {}
 
 void main() {
   late PersonLocaleDataSourceImpl personLocaleDataSource;
   late MockHive hive;
   late MockHiveBox personBox;
+  late MockIterable iterable;
   setUp(() async {
     hive = MockHive();
-    await hive.initFlutter();
+    iterable = MockIterable();
+    // await hive.initFlutter();
     personBox = MockHiveBox();
 
     personLocaleDataSource = PersonLocaleDataSourceImpl(hiveBox: personBox);
@@ -40,7 +43,7 @@ void main() {
   });
 
   group("get persons", () {
-    test('should store/cache the person object in the person box', () async {
+    test('should get persons from the box', () async {
       // arrange
       when(() => personBox.values).thenReturn(tPersonsList);
       // act
@@ -49,4 +52,18 @@ void main() {
       verify(() => personBox.values).called(1);
     });
   });
+
+  group("get person", () {
+    test('should get person from the box', () async {
+      // arrange
+      when(() => personBox.values).thenReturn(tPersonsList);
+
+      when(() => iterable.firstWhere((element) => (element as Map<String,dynamic>)['id'] == id)).thenAnswer((_)=>tPerson.toJson(id: id));
+      // act
+      await personLocaleDataSource.getPerson(id);
+      // assert
+      verify(() => personBox.values).called(1);
+    });
+  });
+
 }
