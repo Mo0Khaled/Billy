@@ -32,9 +32,13 @@ class PersonRepositoryImpl implements PersonRepository {
   }
 
   @override
-  Future<Either<Failure, PersonModel>> getPerson(String id) {
-    // TODO: implement getPerson
-    throw UnimplementedError();
+  Future<Either<Failure, PersonModel>> getPerson(String id) async {
+    try {
+      final person = await localeDataSource.getPerson(id);
+      return Right(person);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
   }
 
   @override

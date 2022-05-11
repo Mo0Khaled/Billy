@@ -75,4 +75,32 @@ void main() {
       expect(result, equals(Left(CacheFailure())));
     });
   });
+
+  group("get person", () {
+    const tId = 'id';
+    test('should return a person when there is one on the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.getPerson(tId))
+              .thenAnswer((_) async => tPerson);
+          // act
+          final result = await repository.getPerson(tId);
+          // assert
+          verify(() => mockPersonLocalDataSource.getPerson(tId)).called(1);
+          expect(result, equals(const Right(tPerson)));
+        });
+
+    test('should throws a cache failure if there is no person on the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.getPerson(tId))
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getPerson(tId);
+          // assert
+          verify(() => mockPersonLocalDataSource.getPerson(tId)).called(1);
+          expect(result, equals(Left(CacheFailure())));
+        });
+  });
+
 }

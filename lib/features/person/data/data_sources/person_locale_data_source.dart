@@ -6,7 +6,7 @@ abstract class PersonLocaleDataSource {
 
   Future<void> deletePerson(String id);
 
-  Future<PersonEntity> getPerson(String id);
+  Future<PersonModel> getPerson(String id);
 
   Future<List<PersonModel>> getPersons();
 
