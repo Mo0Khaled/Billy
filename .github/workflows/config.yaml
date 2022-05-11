@@ -29,8 +29,8 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.secret_codecov_token }}
+#        with:
+#          token: ${{ secrets.secret_codecov_token }}
 
       - name: Very Good Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.2.1
