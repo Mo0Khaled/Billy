@@ -1,4 +1,5 @@
 import 'package:billy/core/constant/locale_db_keys.dart';
+import 'package:billy/core/exceptions/exceptions.dart';
 import 'package:billy/features/person/data/data_sources/person_locale_data_source.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/domain/entities/person_entity.dart';
@@ -12,21 +13,15 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
 
   @override
   Future<void> createPerson(PersonModel person) async {
-    final personMap = person.toJson(id: person.id!);
+    final personMap = person.toJson();
     await hiveBox.add(personMap);
-  }
-
-  @override
-  Future<void> deletePerson(String id) {
-    // TODO: implement deletePerson
-    throw UnimplementedError();
   }
 
   @override
   Future<PersonModel> getPerson(String id) async {
     final personList = hiveBox.values;
-    final personBox = personList
-        .firstWhere((element) => (element as Map<String, dynamic>)['id'] == id);
+    final personBox = personList.firstWhere(
+        (element) => (element as Map<dynamic, dynamic>)['id'] == id);
     final person = PersonModel.fromJson(personBox as Map<dynamic, dynamic>);
     return person;
   }
@@ -42,5 +37,18 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   Future<PersonModel> updatePerson(PersonModel person) {
     // TODO: implement updatePerson
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deletePerson(String id) async {
+    final it = hiveBox.values;
+    final index =  it.toList().indexWhere(
+          (element) => (element as Map<dynamic, dynamic>)['id'] == id,
+        );
+    if(index != -1) {
+      await hiveBox.deleteAt(index);
+    }else{
+      throw CacheException();
+    }
   }
 }

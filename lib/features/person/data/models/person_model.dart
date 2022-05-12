@@ -11,7 +11,7 @@ class PersonModel extends PersonEntity {
         phone: json['phone'] as String?,
       );
 
-  Map<String, dynamic> toJson({required String id}) => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'phone': phone,
