@@ -103,4 +103,32 @@ void main() {
         });
   });
 
+  group("delete person", () {
+    const tId = 'id';
+    test('should return a void when the person removed from the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.deletePerson(tId))
+              .thenAnswer((_) async => true);
+          // act
+          final result = await repository.deletePerson(tId);
+          // assert
+          verify(() => mockPersonLocalDataSource.deletePerson(tId)).called(1);
+          expect(result, equals(const Right(true)));
+        });
+
+    test('should throws a cache failure if there is no person on the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.deletePerson(tId))
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.deletePerson(tId);
+          // assert
+          verify(() => mockPersonLocalDataSource.deletePerson(tId)).called(1);
+          expect(result, equals(Left(CacheFailure())));
+        });
+  });
+
+
 }

@@ -48,8 +48,12 @@ class PersonRepositoryImpl implements PersonRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deletePerson(String id) {
-    // TODO: implement deletePerson
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deletePerson(String id) async {
+    try {
+      await localeDataSource.deletePerson(id);
+      return const Right(true);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
   }
 }
