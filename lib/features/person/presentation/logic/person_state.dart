@@ -23,6 +23,15 @@ class PersonGetSuccessfully extends PersonState {
   List<Object> get props => [personList];
 }
 
+class GetSinglePersonSuccessfully extends PersonState {
+  final PersonEntity person;
+
+  const GetSinglePersonSuccessfully({required this.person});
+
+  @override
+  List<Object> get props => [person];
+}
+
 class PersonAddedSuccessfully extends PersonState {
   @override
   List<Object> get props => [];

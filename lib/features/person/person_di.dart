@@ -4,6 +4,7 @@ import 'package:billy/features/person/data/data_sources/person_locale_data_sourc
 import 'package:billy/features/person/data/repositories/person_repository_impl.dart';
 import 'package:billy/features/person/domain/repositories/person_repository.dart';
 import 'package:billy/features/person/domain/use_cases/create_person_use_case.dart';
+import 'package:billy/features/person/domain/use_cases/get_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_persons_use_case.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:billy/injection_container.dart';
@@ -17,6 +18,7 @@ Future<void> personDi() async {
     () => PersonCubit(
       createPersonUseCase: sl(),
       getPersonsUseCase: sl(),
+      getPersonUseCase: sl(),
     ),
   );
   //use cases
@@ -26,7 +28,12 @@ Future<void> personDi() async {
     ),
   );
   sl.registerLazySingleton(
-        () => GetPersonsUseCase(
+    () => GetPersonsUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => GetPersonUseCase(
       repository: sl(),
     ),
   );
