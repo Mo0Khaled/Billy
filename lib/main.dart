@@ -1,4 +1,5 @@
 import 'package:billy/core/constant/bloc_observer.dart';
+import 'package:billy/core/constant/locale_db_keys.dart';
 import 'package:billy/core/theme/app_theme.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
@@ -45,19 +46,33 @@ class TestScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Billy'),
-          leading:IconButton(onPressed: (){
-            final cubit = InjectionContainer.locator<PersonCubit>();
-       final personModel= PersonModel(id: null,name: 'mo',phone: "344");
-            cubit.createPerson(personModel: personModel);
-          },icon: Icon(Icons.eighteen_mp)),
+          leading: IconButton(
+              onPressed: () {
+                final cubit = InjectionContainer.locator<PersonCubit>();
+
+                final personModel =
+                    PersonModel(id: 'null', name: 'mo', phone: "344");
+                cubit.createPerson(personModel: personModel);
+              },
+              icon: Icon(Icons.eighteen_mp)),
         ),
         body: BlocBuilder<PersonCubit, PersonState>(
           builder: (context, state) {
             final cubit = BlocProvider.of<PersonCubit>(context);
             return ListView.builder(
               itemCount: cubit.persons.length,
-              itemBuilder: (context, index) => Text(
-                cubit.persons[index].name,
+              itemBuilder: (context, index) => Column(
+                children: [
+                  if(index == 0)Text(state.toString()),
+                  GestureDetector(
+                    onTap: () {
+                      cubit.deletePerson(cubit.persons[index].id!);
+                    },
+                    child: Text(
+                      cubit.persons[index].name,
+                    ),
+                  ),
+                ],
               ),
             );
           },

@@ -2,6 +2,7 @@ import 'package:billy/core/exceptions/failure.dart';
 import 'package:billy/core/usecases/use_case.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/domain/use_cases/create_person_use_case.dart';
+import 'package:billy/features/person/domain/use_cases/delete_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_persons_use_case.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
@@ -15,19 +16,24 @@ class MockGetPersonsUseCase extends Mock implements GetPersonsUseCase {}
 
 class MockGetPersonUseCase extends Mock implements GetPersonUseCase {}
 
+class MockDeletePersonUseCase extends Mock implements DeletePersonUseCase {}
+
 void main() {
   late MockCreatePersonUseCase mockCreatePersonUseCase;
   late MockGetPersonsUseCase mockGetPersonsUseCase;
   late MockGetPersonUseCase mockGetPersonUseCase;
+  late MockDeletePersonUseCase mockDeletePersonUseCase;
   late PersonCubit personCubit;
   setUp(() {
     mockCreatePersonUseCase = MockCreatePersonUseCase();
     mockGetPersonsUseCase = MockGetPersonsUseCase();
     mockGetPersonUseCase = MockGetPersonUseCase();
+    mockDeletePersonUseCase = MockDeletePersonUseCase();
     personCubit = PersonCubit(
       createPersonUseCase: mockCreatePersonUseCase,
       getPersonsUseCase: mockGetPersonsUseCase,
       getPersonUseCase: mockGetPersonUseCase,
+      deletePersonUseCase: mockDeletePersonUseCase,
     );
   });
 
@@ -146,6 +152,44 @@ void main() {
       // act
 
       await personCubit.getPerson(tId);
+    });
+  });
+
+  group('deletePerson', () {
+    const tId = 'id';
+    test(
+        'should emit [PersonLoading,PersonDeletedSuccessfully] when the person gotten successfully',
+        () async {
+      // arrange
+      when(() => mockDeletePersonUseCase(tId))
+          .thenAnswer((_) async => const Right(true));
+      // assert later
+      final expectedStates = [
+        PersonLoading(),
+         PersonDeletedSuccessfully(),
+      ];
+      expectLater(personCubit.stream, emitsInOrder(expectedStates));
+      // act
+
+      await personCubit.deletePerson(tId);
+    });
+
+    test(
+        'should emit [PersonLoading,PersonFailure] when the person is could not created',
+        () async {
+      // arrange
+      when(() => mockDeletePersonUseCase(tId))
+          .thenAnswer((_) async => Left(CacheFailure()));
+
+      // assert later
+      final expectedStates = [
+        PersonLoading(),
+        PersonFailure(),
+      ];
+      expectLater(personCubit.stream, emitsInOrder(expectedStates));
+      // act
+
+      await personCubit.deletePerson(tId);
     });
   });
 }

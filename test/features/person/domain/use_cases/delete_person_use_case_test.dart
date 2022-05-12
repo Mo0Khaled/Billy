@@ -8,11 +8,11 @@ class MockPersonRepository extends Mock implements PersonRepository {}
 
 void main() {
   late MockPersonRepository mockPersonRepository;
-  late RemovePersonUseCase useCase;
+  late DeletePersonUseCase useCase;
 
   setUp(() {
     mockPersonRepository = MockPersonRepository();
-    useCase = RemovePersonUseCase(
+    useCase = DeletePersonUseCase(
       repository: mockPersonRepository,
     );
   });

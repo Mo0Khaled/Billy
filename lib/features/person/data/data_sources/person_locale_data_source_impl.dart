@@ -42,12 +42,12 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   @override
   Future<void> deletePerson(String id) async {
     final it = hiveBox.values;
-    final index =  it.toList().indexWhere(
+    final index = it.toList().indexWhere(
           (element) => (element as Map<dynamic, dynamic>)['id'] == id,
         );
-    if(index != -1) {
+    if (index != -1) {
       await hiveBox.deleteAt(index);
-    }else{
+    } else {
       throw CacheException();
     }
   }

@@ -21,22 +21,16 @@ void main() {
   late MockIterable iterable;
   setUp(() async {
     hive = MockHive();
-    iterable = MockIterable(
-
-    );
+    iterable = MockIterable();
     // await hive.initFlutter();
     personBox = MockHiveBox();
 
     personLocaleDataSource = PersonLocaleDataSourceImpl(hiveBox: personBox);
   });
-  final id =' const Uuid().v1()';
+  final id = ' const Uuid().v1()';
 
   final tPerson = PersonModel(id: id, name: 'name', phone: 'phone');
-  final tPersonsList = [
-    tPerson.toJson(),
-    tPerson.toJson(),
-    tPerson.toJson()
-  ];
+  final tPersonsList = [tPerson.toJson(), tPerson.toJson(), tPerson.toJson()];
 
   group("store created person", () {
     final tPersonMap = tPerson.toJson();
@@ -80,8 +74,7 @@ void main() {
     test('should delete person from the box', () async {
       // arrange
       when(() => personBox.values).thenReturn(tPersonsList);
-      when(() => personBox.deleteAt(personIndex))
-          .thenAnswer((_) async => 0);
+      when(() => personBox.deleteAt(personIndex)).thenAnswer((_) async => 0);
       // act
       await personLocaleDataSource.deletePerson(id);
       // assert
@@ -95,8 +88,7 @@ void main() {
       // arrange
       when(() => personBox.values).thenReturn([]);
 
-      when(() => personBox.deleteAt(4))
-          .thenAnswer((_) async => 0);
+      when(() => personBox.deleteAt(4)).thenAnswer((_) async => 0);
       // act
       final call = personLocaleDataSource.deletePerson;
       // assert
