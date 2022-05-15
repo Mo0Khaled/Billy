@@ -42,6 +42,15 @@ class PersonDeletedSuccessfully extends PersonState {
   List<Object> get props => [];
 }
 
+class PersonUpdatedSuccessfully extends PersonState {
+  final PersonModel updatedPerson;
+
+  const PersonUpdatedSuccessfully({required this.updatedPerson});
+
+  @override
+  List<Object> get props => [updatedPerson];
+}
+
 class PersonFailure extends PersonState {
   @override
   List<Object> get props => [];

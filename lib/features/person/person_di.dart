@@ -7,6 +7,7 @@ import 'package:billy/features/person/domain/use_cases/create_person_use_case.da
 import 'package:billy/features/person/domain/use_cases/delete_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_persons_use_case.dart';
+import 'package:billy/features/person/domain/use_cases/update_person_use_case.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:billy/injection_container.dart';
 import 'package:hive/hive.dart';
@@ -21,6 +22,7 @@ Future<void> personDi() async {
       getPersonsUseCase: sl(),
       getPersonUseCase: sl(),
       deletePersonUseCase: sl(),
+      updatePersonUseCase: sl(),
     ),
   );
   //use cases
@@ -41,6 +43,12 @@ Future<void> personDi() async {
   );
   sl.registerLazySingleton(
         () => DeletePersonUseCase(
+      repository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+        () => UpdatePersonUseCase(
       repository: sl(),
     ),
   );

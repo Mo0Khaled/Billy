@@ -66,8 +66,8 @@ class TestScreen extends StatelessWidget {
                   if(index == 0)GestureDetector(onTap: (){
 
                     final personModel =
-                    PersonModel(id: 'null', name: 'mo', phone: "344");
-                    cubit.createPerson(personModel: personModel);
+                    PersonModel(id: 'null', name: 'xd', phone: "344");
+                    cubit.updatePerson(personModel);
                   },child: Text("state.toString()")),
                   GestureDetector(
                     onTap: () {

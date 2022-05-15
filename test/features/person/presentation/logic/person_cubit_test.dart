@@ -5,6 +5,7 @@ import 'package:billy/features/person/domain/use_cases/create_person_use_case.da
 import 'package:billy/features/person/domain/use_cases/delete_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/get_persons_use_case.dart';
+import 'package:billy/features/person/domain/use_cases/update_person_use_case.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,26 +19,27 @@ class MockGetPersonUseCase extends Mock implements GetPersonUseCase {}
 
 class MockDeletePersonUseCase extends Mock implements DeletePersonUseCase {}
 
-class MockList extends Mock implements List {}
+class MockUpdatePersonUseCase extends Mock implements UpdatePersonUseCase {}
 
 void main() {
   late MockCreatePersonUseCase mockCreatePersonUseCase;
   late MockGetPersonsUseCase mockGetPersonsUseCase;
   late MockGetPersonUseCase mockGetPersonUseCase;
   late MockDeletePersonUseCase mockDeletePersonUseCase;
+  late MockUpdatePersonUseCase mockUpdatePersonUseCase;
   late PersonCubit personCubit;
-  late MockList mockList;
   setUp(() {
     mockCreatePersonUseCase = MockCreatePersonUseCase();
     mockGetPersonsUseCase = MockGetPersonsUseCase();
     mockGetPersonUseCase = MockGetPersonUseCase();
     mockDeletePersonUseCase = MockDeletePersonUseCase();
-    mockList = MockList();
+    mockUpdatePersonUseCase = MockUpdatePersonUseCase();
     personCubit = PersonCubit(
       createPersonUseCase: mockCreatePersonUseCase,
       getPersonsUseCase: mockGetPersonsUseCase,
       getPersonUseCase: mockGetPersonUseCase,
       deletePersonUseCase: mockDeletePersonUseCase,
+      updatePersonUseCase: mockUpdatePersonUseCase,
     );
     const tPerson = PersonModel(id: '1', name: 'name');
     const tPersonsList = [tPerson, tPerson, tPerson];
@@ -191,7 +193,6 @@ void main() {
       // arrange
       when(() => mockDeletePersonUseCase(tId))
           .thenAnswer((_) async => Left(CacheFailure()));
-      when(() => mockList.removeAt(0)).thenReturn(tPerson);
 
       // assert later
       final expectedStates = [
@@ -202,6 +203,51 @@ void main() {
       // act
 
       await personCubit.deletePerson(tId);
+    });
+  });
+
+  group('updatePerson', () {
+    const tId = '1';
+    const tUpdatedPerson = PersonModel(id: tId, name: 'mo', phone: 'phone');
+
+    test(
+        'should emit [PersonLoading,PersonUpdatedSuccessfully] when the person gotten successfully',
+        () async {
+      // arrange
+      when(() => mockGetPersonsUseCase(NoParams()))
+          .thenAnswer((_) async => const Right(tPersonsList));
+      when(() => mockUpdatePersonUseCase(
+              const UpdatePersonParams(personModel: tUpdatedPerson)))
+          .thenAnswer((_) async => const Right(tUpdatedPerson));
+
+      // assert later
+      final expectedStates = [
+        PersonLoading(),
+        const PersonUpdatedSuccessfully(updatedPerson: tUpdatedPerson),
+      ];
+      expectLater(personCubit.stream, emitsInOrder(expectedStates));
+      // act
+
+      await personCubit.updatePerson(tUpdatedPerson);
+    });
+
+    test(
+        'should emit [PersonLoading,PersonFailure] when the person is could not created',
+        () async {
+      // arrange
+      when(() =>mockUpdatePersonUseCase(
+          const UpdatePersonParams(personModel: tUpdatedPerson)))
+          .thenAnswer((_) async => Left(CacheFailure()));
+
+      // assert later
+      final expectedStates = [
+        PersonLoading(),
+        PersonFailure(),
+      ];
+      expectLater(personCubit.stream, emitsInOrder(expectedStates));
+      // act
+
+      await personCubit.updatePerson(tUpdatedPerson);
     });
   });
 }
