@@ -27,9 +27,9 @@ void main() {
 
     personLocaleDataSource = PersonLocaleDataSourceImpl(hiveBox: personBox);
   });
-  final id = ' const Uuid().v1()';
+  const id = ' const Uuid().v1()';
 
-  final tPerson = PersonModel(id: id, name: 'name', phone: 'phone');
+  const tPerson = PersonModel(id: id, name: 'name', phone: 'phone');
   final tPersonsList = [tPerson.toJson(), tPerson.toJson(), tPerson.toJson()];
 
   group("store created person", () {
@@ -93,6 +93,39 @@ void main() {
       final call = personLocaleDataSource.deletePerson;
       // assert
       expect(() => call(id), throwsA(isInstanceOf<CacheException>()));
+    });
+  });
+
+  group("update person", () {
+    const int personIndex = 0;
+    const tUpdatedPerson = PersonModel(id: id, name: 'mo', phone: 'phone');
+
+    test('should update person from an existing index on the box', () async {
+      // arrange
+      when(() => personBox.values).thenReturn(tPersonsList);
+      when(() => personBox.putAt(personIndex, tUpdatedPerson.toJson()))
+          .thenAnswer((_) async => true);
+      // act
+      await personLocaleDataSource.updatePerson(tUpdatedPerson);
+      // assert
+      verify(() => personBox.values).called(1);
+      verify(() => personBox.putAt(personIndex, tUpdatedPerson.toJson()))
+          .called(1);
+    });
+
+    test(
+        'should throws a cache exception when there is no person with the specific id and it returns [-1]',
+        () async {
+      // arrange
+      when(() => personBox.values).thenReturn([]);
+
+      when(() => personBox.putAt(personIndex, tUpdatedPerson.toJson()))
+          .thenAnswer((_) async => true);
+      // act
+      final call = personLocaleDataSource.updatePerson;
+      // assert
+      expect(
+          () => call(tUpdatedPerson), throwsA(isInstanceOf<CacheException>()));
     });
   });
 }

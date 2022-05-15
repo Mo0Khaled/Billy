@@ -31,9 +31,19 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   }
 
   @override
-  Future<PersonModel> updatePerson(PersonModel person) {
-    // TODO: implement updatePerson
-    throw UnimplementedError();
+  Future<PersonModel> updatePerson(PersonModel person) async {
+    final it = hiveBox.values;
+    final index = it.toList().indexWhere(
+          (element) => (element as Map<dynamic, dynamic>)['id'] == person.id,
+        );
+    if (index != -1) {
+
+      await hiveBox.putAt(index, person.toJson());
+
+      return person;
+    } else {
+      throw CacheException();
+    }
   }
 
   @override
