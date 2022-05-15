@@ -1,10 +1,7 @@
-import 'package:billy/core/constant/locale_db_keys.dart';
 import 'package:billy/core/exceptions/exceptions.dart';
 import 'package:billy/features/person/data/data_sources/person_locale_data_source.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
-import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   final Box hiveBox;
@@ -40,13 +37,14 @@ class PersonLocaleDataSourceImpl implements PersonLocaleDataSource {
   }
 
   @override
-  Future<void> deletePerson(String id) async {
+  Future<int> deletePerson(String id) async {
     final it = hiveBox.values;
     final index = it.toList().indexWhere(
           (element) => (element as Map<dynamic, dynamic>)['id'] == id,
         );
     if (index != -1) {
       await hiveBox.deleteAt(index);
+      return index;
     } else {
       throw CacheException();
     }

@@ -18,24 +18,33 @@ class MockGetPersonUseCase extends Mock implements GetPersonUseCase {}
 
 class MockDeletePersonUseCase extends Mock implements DeletePersonUseCase {}
 
+class MockList extends Mock implements List {}
+
 void main() {
   late MockCreatePersonUseCase mockCreatePersonUseCase;
   late MockGetPersonsUseCase mockGetPersonsUseCase;
   late MockGetPersonUseCase mockGetPersonUseCase;
   late MockDeletePersonUseCase mockDeletePersonUseCase;
   late PersonCubit personCubit;
+  late MockList mockList;
   setUp(() {
     mockCreatePersonUseCase = MockCreatePersonUseCase();
     mockGetPersonsUseCase = MockGetPersonsUseCase();
     mockGetPersonUseCase = MockGetPersonUseCase();
     mockDeletePersonUseCase = MockDeletePersonUseCase();
+    mockList = MockList();
     personCubit = PersonCubit(
       createPersonUseCase: mockCreatePersonUseCase,
       getPersonsUseCase: mockGetPersonsUseCase,
       getPersonUseCase: mockGetPersonUseCase,
       deletePersonUseCase: mockDeletePersonUseCase,
     );
+    const tPerson = PersonModel(id: '1', name: 'name');
+    const tPersonsList = [tPerson, tPerson, tPerson];
+    personCubit.persons.addAll(tPersonsList);
   });
+  const tPerson = PersonModel(id: '1', name: 'name');
+  const tPersonsList = [tPerson, tPerson, tPerson];
 
   group('createPerson', () {
     const tPerson = PersonModel(id: '1', name: 'name');
@@ -118,7 +127,6 @@ void main() {
   group('getPerson', () {
     const tPerson = PersonModel(id: '1', name: 'name');
     const tId = 'id';
-    const tPersonsList = [tPerson, tPerson, tPerson];
     test(
         'should emit [PersonLoading,GetSinglePersonSuccessfully] when the person gotten successfully',
         () async {
@@ -161,12 +169,15 @@ void main() {
         'should emit [PersonLoading,PersonDeletedSuccessfully] when the person gotten successfully',
         () async {
       // arrange
+      when(() => mockGetPersonsUseCase(NoParams()))
+          .thenAnswer((_) async => const Right(tPersonsList));
       when(() => mockDeletePersonUseCase(tId))
-          .thenAnswer((_) async => const Right(true));
+          .thenAnswer((_) async => const Right(0));
+
       // assert later
       final expectedStates = [
         PersonLoading(),
-         PersonDeletedSuccessfully(),
+        PersonDeletedSuccessfully(),
       ];
       expectLater(personCubit.stream, emitsInOrder(expectedStates));
       // act
@@ -180,6 +191,7 @@ void main() {
       // arrange
       when(() => mockDeletePersonUseCase(tId))
           .thenAnswer((_) async => Left(CacheFailure()));
+      when(() => mockList.removeAt(0)).thenReturn(tPerson);
 
       // assert later
       final expectedStates = [

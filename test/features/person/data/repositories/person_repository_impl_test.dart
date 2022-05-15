@@ -109,12 +109,12 @@ void main() {
             () async {
           // arrange
           when(() => mockPersonLocalDataSource.deletePerson(tId))
-              .thenAnswer((_) async => true);
+              .thenAnswer((_) async => 0);
           // act
           final result = await repository.deletePerson(tId);
           // assert
           verify(() => mockPersonLocalDataSource.deletePerson(tId)).called(1);
-          expect(result, equals(const Right(true)));
+          expect(result, equals(const Right(0)));
         });
 
     test('should throws a cache failure if there is no person on the db',

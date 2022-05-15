@@ -63,7 +63,12 @@ class TestScreen extends StatelessWidget {
               itemCount: cubit.persons.length,
               itemBuilder: (context, index) => Column(
                 children: [
-                  if(index == 0)Text(state.toString()),
+                  if(index == 0)GestureDetector(onTap: (){
+
+                    final personModel =
+                    PersonModel(id: 'null', name: 'mo', phone: "344");
+                    cubit.createPerson(personModel: personModel);
+                  },child: Text("state.toString()")),
                   GestureDetector(
                     onTap: () {
                       cubit.deletePerson(cubit.persons[index].id!);

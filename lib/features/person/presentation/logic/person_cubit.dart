@@ -32,13 +32,14 @@ class PersonCubit extends Cubit<PersonState> {
     final failureOrData = await createPersonUseCase(
         CreatePersonUseCaseParams(person: personModel));
     failureOrData.fold(
-      (failure) => emit(
-        PersonFailure(),
-      ),
-      (data) => emit(
+        (failure) => emit(
+              PersonFailure(),
+            ), (data) {
+      persons.add(personModel);
+      emit(
         PersonAddedSuccessfully(),
-      ),
-    );
+      );
+    });
   }
 
   Future<void> getPersons() async {
@@ -67,7 +68,10 @@ class PersonCubit extends Cubit<PersonState> {
     final failureOrData = await deletePersonUseCase(id);
     failureOrData.fold(
       (failure) => emit(PersonFailure()),
-      (person) => emit(PersonDeletedSuccessfully()),
+      (person) {
+        persons.removeAt(person);
+        emit(PersonDeletedSuccessfully());
+      },
     );
   }
 }

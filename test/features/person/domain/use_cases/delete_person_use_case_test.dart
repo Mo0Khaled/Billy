@@ -20,7 +20,7 @@ void main() {
   const tId = "id";
   test("should remove person obj by id from the person box", ()async{
     //arrange
-    when(()=>mockPersonRepository.deletePerson(tId)).thenAnswer((invocation) async => const Right({}));
+    when(()=>mockPersonRepository.deletePerson(tId)).thenAnswer((invocation) async => const Right(0));
 
     // act
 
@@ -28,7 +28,7 @@ void main() {
 
     // assert
 
-    expect(result, const Right({}));
+    expect(result, const Right(0));
     verify(()=> mockPersonRepository.deletePerson(tId)).called(1);
     verifyNoMoreInteractions(mockPersonRepository);
   });

@@ -4,7 +4,7 @@ import 'package:billy/features/person/domain/entities/person_entity.dart';
 abstract class PersonLocaleDataSource {
   Future<void> createPerson(PersonModel person);
 
-  Future<void> deletePerson(String id);
+  Future<int> deletePerson(String id);
 
   Future<PersonModel> getPerson(String id);
 
