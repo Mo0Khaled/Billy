@@ -42,15 +42,19 @@ class PersonRepositoryImpl implements PersonRepository {
   }
 
   @override
-  Future<Either<Failure, PersonModel>> updatePerson(PersonEntity person) {
-    // TODO: implement updatePerson
-    throw UnimplementedError();
+  Future<Either<Failure, PersonModel>> updatePerson(PersonModel person) async {
+    try {
+      final updatedPerson = await localeDataSource.updatePerson(person);
+      return Right(updatedPerson);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
   }
 
   @override
   Future<Either<Failure, int>> deletePerson(String id) async {
     try {
-   final deletedIndex =    await localeDataSource.deletePerson(id);
+      final deletedIndex = await localeDataSource.deletePerson(id);
       return Right(deletedIndex);
     } on CacheException {
       return Left(CacheFailure());

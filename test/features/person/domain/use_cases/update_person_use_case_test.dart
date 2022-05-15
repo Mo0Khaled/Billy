@@ -25,7 +25,7 @@ void main() {
 
   const tUpdatedPerson =  PersonModel(
     id: "1",
-    name: 'name',
+    name: 'x',
     phone: 'phone',
   );
 

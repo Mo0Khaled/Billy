@@ -3,7 +3,6 @@ import 'package:billy/core/exceptions/failure.dart';
 import 'package:billy/features/person/data/data_sources/person_locale_data_source.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/data/repositories/person_repository_impl.dart';
-import 'package:billy/features/person/domain/entities/person_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -130,5 +129,32 @@ void main() {
         });
   });
 
+  group("update person", () {
+    const tUpdatedPerson = PersonModel(id: '1', name: 'name',phone: "0123");
+
+    test('should return a new person object when the person updated on the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.updatePerson(tPerson))
+              .thenAnswer((_) async => tUpdatedPerson);
+          // act
+          final result = await repository.updatePerson(tPerson);
+          // assert
+          verify(() => mockPersonLocalDataSource.updatePerson(tPerson)).called(1);
+          expect(result, equals(const Right(tUpdatedPerson)));
+        });
+
+    test('should throws a cache failure if there is no person on the db',
+            () async {
+          // arrange
+          when(() => mockPersonLocalDataSource.updatePerson(tPerson))
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.updatePerson(tPerson);
+          // assert
+          verify(() => mockPersonLocalDataSource.updatePerson(tPerson)).called(1);
+          expect(result, equals(Left(CacheFailure())));
+        });
+  });
 
 }
