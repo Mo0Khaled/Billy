@@ -43,9 +43,6 @@ class PersonCubit extends Cubit<PersonState> {
 
   Future<void> getPersons() async {
     emit(PersonLoading());
-    final x = Hive.box(LocaleBoxesDbKeys.personBoxKey).watch().map((event) => Hive.box(LocaleBoxesDbKeys.personBoxKey).values
-        .where((element) => element == element)
-        .toList());
     final failureOrData = await getPersonsUseCase(NoParams());
     failureOrData.fold(
         (failure) => emit(
