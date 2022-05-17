@@ -16,7 +16,7 @@ Future<void> personDi() async {
   final sl = InjectionContainer.locator;
 
   // Register services here
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => PersonCubit(
       createPersonUseCase: sl(),
       getPersonsUseCase: sl(),

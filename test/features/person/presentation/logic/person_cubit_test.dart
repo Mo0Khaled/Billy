@@ -1,5 +1,7 @@
 import 'package:billy/core/exceptions/failure.dart';
 import 'package:billy/core/usecases/use_case.dart';
+import 'package:billy/core/validation_rules/name.dart';
+import 'package:billy/core/validation_rules/phone.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/domain/use_cases/create_person_use_case.dart';
 import 'package:billy/features/person/domain/use_cases/delete_person_use_case.dart';
@@ -42,6 +44,8 @@ void main() {
       updatePersonUseCase: mockUpdatePersonUseCase,
     );
     const tPerson = PersonModel(id: '1', name: 'name');
+    personCubit.personForm.phoneField = const PhoneField.dirty("123");
+    personCubit.personForm.nameField = const NameField.dirty("moha khaled");
     const tPersonsList = [tPerson, tPerson, tPerson];
     personCubit.persons.addAll(tPersonsList);
   });
@@ -49,14 +53,14 @@ void main() {
   const tPersonsList = [tPerson, tPerson, tPerson];
 
   group('createPerson', () {
-    const tPerson = PersonModel(id: '1', name: 'name');
+    const tPerson = PersonModel(id: null, name: 'name');
     test(
         'should emit [PersonLoading,PersonAddedSuccessfully] when the person is created successfully',
         () async {
       // arrange
       when(() => mockCreatePersonUseCase(
             const CreatePersonUseCaseParams(person: tPerson),
-          )).thenAnswer((_) async => const Right(null));
+          )).thenAnswer((_) async => const Right(true));
       // assert later
       final expectedStates = [
         PersonLoading(),
@@ -65,7 +69,7 @@ void main() {
       expectLater(personCubit.stream, emitsInOrder(expectedStates));
       // act
 
-      await personCubit.createPerson(personModel: tPerson);
+      await personCubit.createPerson();
     });
 
     test(
@@ -83,7 +87,7 @@ void main() {
       expectLater(personCubit.stream, emitsInOrder(expectedStates));
       // act
 
-      await personCubit.createPerson(personModel: tPerson);
+      await personCubit.createPerson();
     });
   });
 

@@ -55,3 +55,19 @@ class PersonFailure extends PersonState {
   @override
   List<Object> get props => [];
 }
+
+class PersonValid extends PersonState {
+
+  const PersonValid();
+
+  @override
+  List<Object> get props => [];
+}
+
+class PersonUnValid extends PersonState {
+
+  const PersonUnValid();
+
+  @override
+  List<Object> get props => [];
+}
