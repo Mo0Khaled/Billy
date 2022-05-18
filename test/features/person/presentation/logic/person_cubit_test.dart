@@ -12,6 +12,7 @@ import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:uuid/uuid.dart';
 
 class MockCreatePersonUseCase extends Mock implements CreatePersonUseCase {}
 
@@ -23,41 +24,54 @@ class MockDeletePersonUseCase extends Mock implements DeletePersonUseCase {}
 
 class MockUpdatePersonUseCase extends Mock implements UpdatePersonUseCase {}
 
+class MockUUid extends Mock implements Uuid {}
+
 void main() {
   late MockCreatePersonUseCase mockCreatePersonUseCase;
   late MockGetPersonsUseCase mockGetPersonsUseCase;
   late MockGetPersonUseCase mockGetPersonUseCase;
   late MockDeletePersonUseCase mockDeletePersonUseCase;
   late MockUpdatePersonUseCase mockUpdatePersonUseCase;
+  late MockUUid mockUUid;
   late PersonCubit personCubit;
+
   setUp(() {
     mockCreatePersonUseCase = MockCreatePersonUseCase();
     mockGetPersonsUseCase = MockGetPersonsUseCase();
     mockGetPersonUseCase = MockGetPersonUseCase();
     mockDeletePersonUseCase = MockDeletePersonUseCase();
     mockUpdatePersonUseCase = MockUpdatePersonUseCase();
+    mockUUid = MockUUid();
     personCubit = PersonCubit(
       createPersonUseCase: mockCreatePersonUseCase,
       getPersonsUseCase: mockGetPersonsUseCase,
       getPersonUseCase: mockGetPersonUseCase,
       deletePersonUseCase: mockDeletePersonUseCase,
       updatePersonUseCase: mockUpdatePersonUseCase,
+      uuid: mockUUid,
     );
     const tPerson = PersonModel(id: '1', name: 'name');
     personCubit.personForm.phoneField = const PhoneField.dirty("123");
     personCubit.personForm.nameField = const NameField.dirty("moha khaled");
+
     const tPersonsList = [tPerson, tPerson, tPerson];
     personCubit.persons.addAll(tPersonsList);
   });
   const tPerson = PersonModel(id: '1', name: 'name');
   const tPersonsList = [tPerson, tPerson, tPerson];
-
+  const name = "moha khaled";
+  const phone = '123';
   group('createPerson', () {
-    const tPerson = PersonModel(id: null, name: 'name');
+    const tPerson = PersonModel(
+      id: '1',
+      name: name,
+      phone: phone,
+    );
     test(
         'should emit [PersonLoading,PersonAddedSuccessfully] when the person is created successfully',
         () async {
       // arrange
+      when(() => mockUUid.v1()).thenAnswer((_) => '1');
       when(() => mockCreatePersonUseCase(
             const CreatePersonUseCaseParams(person: tPerson),
           )).thenAnswer((_) async => const Right(true));
@@ -76,6 +90,7 @@ void main() {
         'should emit [PersonLoading,PersonFailure] when the person is could not created',
         () async {
       // arrange
+      when(() => mockUUid.v1()).thenAnswer((_) => '1');
       when(() => mockCreatePersonUseCase(
             const CreatePersonUseCaseParams(person: tPerson),
           )).thenAnswer((_) async => Left(CacheFailure()));
@@ -239,8 +254,8 @@ void main() {
         'should emit [PersonLoading,PersonFailure] when the person is could not created',
         () async {
       // arrange
-      when(() =>mockUpdatePersonUseCase(
-          const UpdatePersonParams(personModel: tUpdatedPerson)))
+      when(() => mockUpdatePersonUseCase(
+              const UpdatePersonParams(personModel: tUpdatedPerson)))
           .thenAnswer((_) async => Left(CacheFailure()));
 
       // assert later

@@ -11,6 +11,7 @@ import 'package:billy/features/person/domain/use_cases/update_person_use_case.da
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:billy/injection_container.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> personDi() async {
   final sl = InjectionContainer.locator;
@@ -23,6 +24,7 @@ Future<void> personDi() async {
       getPersonUseCase: sl(),
       deletePersonUseCase: sl(),
       updatePersonUseCase: sl(),
+      uuid: sl(),
     ),
   );
   //use cases
@@ -69,4 +71,5 @@ Future<void> personDi() async {
   //! External
   final hiveBox = await Hive.openBox(LocaleBoxesDbKeys.personBoxKey);
   sl.registerLazySingleton<Box>(() => hiveBox);
+  sl.registerLazySingleton<Uuid>(() => const Uuid());
 }

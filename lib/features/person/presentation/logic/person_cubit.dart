@@ -23,17 +23,18 @@ class PersonCubit extends Cubit<PersonState> {
   final GetPersonUseCase getPersonUseCase;
   final DeletePersonUseCase deletePersonUseCase;
   final UpdatePersonUseCase updatePersonUseCase;
-
+  final Uuid uuid;
   PersonCubit({
     required this.createPersonUseCase,
     required this.getPersonsUseCase,
     required this.getPersonUseCase,
     required this.deletePersonUseCase,
     required this.updatePersonUseCase,
+    required this.uuid,
   }) : super(PersonInitial());
 
   List<PersonEntity> persons = [];
- static final GlobalKey<FormState> personKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> personKey = GlobalKey<FormState>();
   PersonForm personForm = PersonForm();
 
   void validate() {
@@ -42,14 +43,16 @@ class PersonCubit extends Cubit<PersonState> {
       emit(const PersonValid());
       return;
     }
-    emit( const PersonUnValid());
+    emit(const PersonUnValid());
   }
 
   Future<void> createPerson() async {
+    final id = uuid.v1();
+    print(id);
     final PersonModel personModel = PersonModel(
       name: personForm.nameField.value,
       phone: personForm.phoneField.value,
-      id: const Uuid().v1(),
+      id: id,
     );
     emit(PersonLoading());
     final failureOrData = await createPersonUseCase(
