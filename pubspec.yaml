@@ -20,7 +20,7 @@ dependencies:
     # Functional programming thingies
   dartz: ^0.10.1
     # Local storage
-  hive: ^2.1.0
+  hive: ^2.2.1
   hive_flutter: ^1.1.0
   path_provider: ^2.0.10
   # Unique identifier
@@ -36,7 +36,11 @@ dev_dependencies:
   mocktail: ^0.3.0
   # code lints
   lint: ^1.8.2
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
+  easy_breezy_validator: ^0.0.1
+
+
+
 flutter:
   uses-material-design: true
 
