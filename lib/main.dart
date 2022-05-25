@@ -4,6 +4,7 @@ import 'package:billy/core/theme/app_theme.dart';
 import 'package:billy/features/person/data/models/person_model.dart';
 import 'package:billy/features/person/presentation/logic/person_cubit.dart';
 import 'package:billy/features/person/presentation/pages/add_person_page.dart';
+import 'package:billy/features/person/presentation/pages/persons_page.dart';
 import 'package:billy/injection_container.dart';
 import 'package:billy/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class Billy extends StatelessWidget {
         home: BlocProvider(
           create: (context) =>
           InjectionContainer.locator<PersonCubit>()..getPersons(),
-          child: AddPersonPage(),
+          child: PersonsPage(),
         ),
       ),
     );

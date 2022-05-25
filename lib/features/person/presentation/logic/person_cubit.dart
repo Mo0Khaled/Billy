@@ -51,7 +51,7 @@ class PersonCubit extends Cubit<PersonState> {
     print(id);
     final PersonModel personModel = PersonModel(
       name: personForm.nameField.value,
-      phone: personForm.phoneField.value,
+      phone: personForm.phoneField.value ,
       id: id,
     );
     emit(PersonLoading());

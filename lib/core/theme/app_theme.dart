@@ -6,7 +6,7 @@ class AppTheme {
   static const Color lightAccentColor = Color(0xFFd6d0ff);
   static final lightTheme = ThemeData(
     primaryColor: lightPrimaryColor,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color(0xFFf3f4f6),
     platform: TargetPlatform.iOS,
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: lightAccentColor,

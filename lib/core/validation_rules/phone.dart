@@ -9,6 +9,6 @@ class PhoneField extends FormzInput<String, PhoneValidationError> {
   const PhoneField.dirty([String value = '']) : super.dirty(value);
   @override
   PhoneValidationError? validator(String value) {
-    return isEgyptianPhone(value) ? null : PhoneValidationError.invalid;
+    return value.isEmpty || isEgyptianPhone(value)  ? null : PhoneValidationError.invalid;
   }
 }

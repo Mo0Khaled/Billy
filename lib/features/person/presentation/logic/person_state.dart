@@ -1,20 +1,18 @@
 part of 'person_cubit.dart';
 
-abstract class PersonState extends Equatable {
+abstract class PersonState  {
   const PersonState();
 }
 
 class PersonInitial extends PersonState {
+}
+
+class PersonLoading extends Equatable implements PersonState {
   @override
   List<Object> get props => [];
 }
 
-class PersonLoading extends PersonState {
-  @override
-  List<Object> get props => [];
-}
-
-class PersonGetSuccessfully extends PersonState {
+class PersonGetSuccessfully extends Equatable implements PersonState {
   final List<PersonEntity> personList;
 
   const PersonGetSuccessfully({required this.personList});
@@ -23,7 +21,7 @@ class PersonGetSuccessfully extends PersonState {
   List<Object> get props => [personList];
 }
 
-class GetSinglePersonSuccessfully extends PersonState {
+class GetSinglePersonSuccessfully extends Equatable implements PersonState {
   final PersonEntity person;
 
   const GetSinglePersonSuccessfully({required this.person});
@@ -32,17 +30,17 @@ class GetSinglePersonSuccessfully extends PersonState {
   List<Object> get props => [person];
 }
 
-class PersonAddedSuccessfully extends PersonState {
+class PersonAddedSuccessfully extends Equatable implements PersonState {
   @override
   List<Object> get props => [];
 }
 
-class PersonDeletedSuccessfully extends PersonState {
+class PersonDeletedSuccessfully extends Equatable implements PersonState {
   @override
   List<Object> get props => [];
 }
 
-class PersonUpdatedSuccessfully extends PersonState {
+class PersonUpdatedSuccessfully extends Equatable implements PersonState {
   final PersonModel updatedPerson;
 
   const PersonUpdatedSuccessfully({required this.updatedPerson});
@@ -51,12 +49,12 @@ class PersonUpdatedSuccessfully extends PersonState {
   List<Object> get props => [updatedPerson];
 }
 
-class PersonFailure extends PersonState {
+class PersonFailure extends Equatable implements PersonState {
   @override
   List<Object> get props => [];
 }
 
-class PersonValid extends PersonState {
+class PersonValid extends Equatable implements PersonState {
 
   const PersonValid();
 
@@ -68,6 +66,5 @@ class PersonUnValid extends PersonState {
 
   const PersonUnValid();
 
-  @override
-  List<Object> get props => [];
+
 }
